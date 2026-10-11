@@ -1,0 +1,442 @@
+<Window x:Class="BelarusRP.Launcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="Belarus RP Launcher" Width="1040" Height="720" MinWidth="880" MinHeight="640"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="CanResize"
+        Background="{DynamicResource T_Bg}" FontFamily="Segoe UI" Foreground="{DynamicResource T_Fg}"
+        Loaded="Window_Loaded" StateChanged="Window_StateChanged">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="46" ResizeBorderThickness="6" GlassFrameThickness="0"
+                            CornerRadius="0" UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="Red" Color="#E0202B"/>
+        <SolidColorBrush x:Key="Blue" Color="#2B6CFF"/>
+        <SolidColorBrush x:Key="Muted" Color="#9AA4B8"/>
+
+        <Style x:Key="Caption" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource Muted}"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource T_Card}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource T_CardBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+
+        <!-- Кнопки окна -->
+        <Style x:Key="WinBtn" TargetType="Button">
+            <Setter Property="Width" Value="42"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Foreground" Value="{DynamicResource T_Fg}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#33FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Главная красная кнопка -->
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Height" Value="56"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" CornerRadius="10" BorderThickness="1" BorderBrush="#66FFFFFF">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#E0202B" Offset="0"/>
+                                    <GradientStop Color="#9B1119" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#E0202B" BlurRadius="22" ShadowDepth="0" Opacity="0.5"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Синяя контурная кнопка -->
+        <Style x:Key="BlueButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource T_Fg}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" CornerRadius="8" BorderThickness="1.5" BorderBrush="#2B6CFF"
+                                Background="#222B6CFF" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#552B6CFF"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Тонкая белая кнопка -->
+        <Style x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource T_Fg}"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" CornerRadius="8" BorderThickness="1" BorderBrush="#66FFFFFF"
+                                Background="Transparent" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#33FFFFFF"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#E0202B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Текстовая ссылка-кнопка -->
+        <Style x:Key="LinkButton" TargetType="Button">
+            <Setter Property="Foreground" Value="#9AA4B8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Поле ввода -->
+        <Style x:Key="InputBox" TargetType="TextBox">
+            <Setter Property="Foreground" Value="{DynamicResource T_Fg}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource T_Fg}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="bd" CornerRadius="10" BorderThickness="1.5" BorderBrush="{DynamicResource T_CardBorder}" Background="{DynamicResource T_Input}">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#2B6CFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PassBox" TargetType="PasswordBox">
+            <Setter Property="Foreground" Value="{DynamicResource T_Fg}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource T_Fg}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="bd" CornerRadius="10" BorderThickness="1.5" BorderBrush="{DynamicResource T_CardBorder}" Background="{DynamicResource T_Input}">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#2B6CFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Список серверов -->
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Foreground" Value="{DynamicResource T_Fg}"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="bd" CornerRadius="8" BorderThickness="1" BorderBrush="#33FFFFFF"
+                                Background="#22000000" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#99FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#2B6CFF"/>
+                                <Setter TargetName="bd" Property="Background" Value="#332B6CFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="SplashLogo" Storyboard.TargetProperty="Opacity"
+                                     From="0.35" To="1" Duration="0:0:0.8" AutoReverse="True" RepeatBehavior="Forever"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+
+    <Grid x:Name="RootGrid">
+        <!-- Фон: красный и синий отсветы -->
+        <Ellipse Width="700" Height="700" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-260,0,0,-320" IsHitTestVisible="False">
+            <Ellipse.Fill>
+                <RadialGradientBrush>
+                    <GradientStop Color="#55E0202B" Offset="0"/>
+                    <GradientStop Color="#00E0202B" Offset="1"/>
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+        <Ellipse Width="620" Height="620" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-300,-200,0" IsHitTestVisible="False">
+            <Ellipse.Fill>
+                <RadialGradientBrush>
+                    <GradientStop Color="#442B6CFF" Offset="0"/>
+                    <GradientStop Color="#002B6CFF" Offset="1"/>
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+
+        <!-- Основное содержимое -->
+        <Grid x:Name="ContentRoot" Margin="28,0,28,18">
+            <Grid.RenderTransform>
+                <TranslateTransform x:Name="IntroShift" Y="18"/>
+            </Grid.RenderTransform>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="46"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Строка заголовка -->
+            <Grid Grid.Row="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center"
+                            shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Button x:Name="ThemeBtn" Style="{StaticResource WinBtn}" Content="&#9728;" Click="ThemeBtn_Click"/>
+                    <Button x:Name="LangBtn" Style="{StaticResource WinBtn}" Content="EN" FontWeight="Bold" Click="LangBtn_Click"/>
+                    <Button Style="{StaticResource WinBtn}" Content="&#8212;" Click="Min_Click"/>
+                    <Button Style="{StaticResource WinBtn}" Content="&#10005;" Click="Close_Click"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Логотип -->
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,12">
+                <TextBlock HorizontalAlignment="Center" FontSize="52" FontWeight="Black" FontStyle="Italic">
+                    <Run Text="BELARUS "/><Run Text="RP" Foreground="{StaticResource Red}"/>
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="#E0202B" BlurRadius="26" ShadowDepth="0" Opacity="0.6"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+                <Grid Height="3" Width="260" Margin="0,2,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Rectangle Grid.Column="0" Fill="#E0202B"/>
+                    <Rectangle Grid.Column="1" Fill="White"/>
+                    <Rectangle Grid.Column="2" Fill="#2B6CFF"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- Баннер обновления -->
+            <Border x:Name="UpdateBanner" Grid.Row="2" Visibility="Collapsed" Margin="0,0,0,14"
+                    Background="#222B6CFF" BorderBrush="#2B6CFF" BorderThickness="1" CornerRadius="10" Padding="16,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock x:Name="UpdateText" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                        <ProgressBar x:Name="UpdateProgress" Height="6" Margin="0,8,8,0" Minimum="0" Maximum="100"
+                                     Foreground="#2B6CFF" Background="#33FFFFFF" BorderThickness="0" Visibility="Collapsed"/>
+                    </StackPanel>
+                    <Button x:Name="UpdateBtn" Grid.Column="1" Style="{StaticResource BlueButton}"
+                            Content="{DynamicResource L_UpdateNow}" Click="UpdateBtn_Click" Margin="12,0,0,0"/>
+                </Grid>
+            </Border>
+
+            <!-- Центр: сервер + аккаунт -->
+            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Серверы и статус -->
+                    <Border Grid.Column="0" Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource Caption}" Text="{DynamicResource L_Servers}"/>
+                            <ListBox x:Name="ServerList" Margin="0,10,0,0" Background="Transparent" BorderThickness="0"
+                                     DisplayMemberPath="Name" MaxHeight="170"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     SelectionChanged="ServerList_SelectionChanged"/>
+
+                            <TextBlock Style="{StaticResource Caption}" Text="{DynamicResource L_Status}" Margin="0,14,0,0"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                <Ellipse x:Name="StatusDot" Width="10" Height="10" Fill="#8A93A6" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="StatusText" Margin="10,0,0,0" FontWeight="SemiBold" FontSize="15"/>
+                            </StackPanel>
+
+                            <TextBlock Style="{StaticResource Caption}" Text="{DynamicResource L_Ping}" Margin="0,14,0,0"/>
+                            <TextBlock x:Name="PingText" FontSize="24" FontWeight="Bold" Text="-"/>
+
+                            <TextBlock Style="{StaticResource Caption}" Text="{DynamicResource L_Address}" Margin="0,12,0,0"/>
+                            <TextBlock x:Name="AddressText" TextWrapping="Wrap" FontSize="13"/>
+
+                            <TextBlock Style="{StaticResource Caption}" Text="{DynamicResource L_Game}" Margin="0,16,0,0"/>
+                            <TextBlock x:Name="GameText" Margin="0,6,0,0" TextWrapping="Wrap" FontSize="13"/>
+                            <TextBlock x:Name="RageText" Margin="0,4,0,0" TextWrapping="Wrap" FontSize="13"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Аккаунт и кнопка игры -->
+                    <Border Grid.Column="2" Style="{StaticResource Card}" Padding="28">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource Caption}" Text="{DynamicResource L_Account}"/>
+
+                            <StackPanel x:Name="LoggedOutPanel" Margin="0,12,0,0">
+                                <TextBlock Style="{StaticResource Caption}" Text="{DynamicResource L_LoginLbl}" Margin="0,0,0,4"/>
+                                <TextBox x:Name="LoginBox" Style="{StaticResource InputBox}" MaxLength="32"/>
+                                <TextBlock Style="{StaticResource Caption}" Text="{DynamicResource L_PasswordLbl}" Margin="0,12,0,4"/>
+                                <PasswordBox x:Name="PasswordBox" Style="{StaticResource PassBox}" MaxLength="64"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                                    <Button x:Name="SignInBtn" Style="{StaticResource BlueButton}" Content="{DynamicResource L_SignIn}" Click="SignInBtn_Click"/>
+                                    <Button x:Name="RegisterBtn" Style="{StaticResource GhostButton}" Content="{DynamicResource L_Register}" Margin="10,0,0,0" Click="RegisterBtn_Click"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel x:Name="LoggedInPanel" Margin="0,12,0,0" Visibility="Collapsed">
+                                <TextBlock x:Name="SignedInText" FontSize="16" FontWeight="SemiBold"/>
+                                <Button Style="{StaticResource GhostButton}" Content="{DynamicResource L_SignOut}"
+                                        HorizontalAlignment="Left" Margin="0,12,0,0" Click="SignOutBtn_Click"/>
+                            </StackPanel>
+
+                            <Button x:Name="PlayBtn" Style="{StaticResource PrimaryButton}" Content="{DynamicResource L_Play}"
+                                    Margin="0,26,0,0" Click="PlayBtn_Click"/>
+                            <Button x:Name="VerifyBtn" Style="{StaticResource LinkButton}" Content="{DynamicResource L_Verify}"
+                                    HorizontalAlignment="Center" Margin="0,8,0,0" Click="VerifyBtn_Click"/>
+
+                            <TextBlock x:Name="MessageText" Margin="0,10,0,0" TextWrapping="Wrap" TextAlignment="Center"
+                                       Foreground="{StaticResource Muted}" FontSize="13"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </ScrollViewer>
+
+            <!-- Новости -->
+            <Border Grid.Row="4" Style="{StaticResource Card}" Padding="20,14" Margin="0,16,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource L_News}" Foreground="{StaticResource Red}" FontWeight="Bold" FontSize="12"/>
+                        <TextBlock Text="{DynamicResource L_NewsTitle}" FontSize="16" FontWeight="SemiBold" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                        <TextBlock Text="{DynamicResource L_NewsBody}" Foreground="{StaticResource Muted}" FontSize="13" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" Style="{StaticResource GhostButton}" Content="{DynamicResource L_ReadMore}"
+                            VerticalAlignment="Center" Margin="16,0,0,0" Click="NewsBtn_Click"/>
+                </Grid>
+            </Border>
+
+            <!-- Нижняя строка -->
+            <Grid Grid.Row="5" Margin="0,10,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Style="{StaticResource LinkButton}" Content="VK" Click="VkBtn_Click"/>
+                    <Button Style="{StaticResource LinkButton}" Content="Discord" Click="DiscordBtn_Click"/>
+                    <Button Style="{StaticResource LinkButton}" Content="{DynamicResource L_LogBtn}" Click="LogBtn_Click"/>
+                    <Button Style="{StaticResource LinkButton}" Content="{DynamicResource L_ReportBtn}" Click="ReportBtn_Click"/>
+                    <Button Style="{StaticResource LinkButton}" Content="{DynamicResource L_FeedbackBtn}" Click="FeedbackBtn_Click"/>
+                    <Button Style="{StaticResource LinkButton}" Content="{DynamicResource L_ProfileBtn}" Click="ProfileBtn_Click"/>
+                </StackPanel>
+                <TextBlock x:Name="VersionText" HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Foreground="{StaticResource Muted}" FontSize="12"/>
+            </Grid>
+        </Grid>
+
+        <!-- Заставка при запуске -->
+        <Grid x:Name="LoadingOverlay" Background="{DynamicResource T_Bg}" Panel.ZIndex="100">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock x:Name="SplashLogo" FontSize="54" FontWeight="Black" FontStyle="Italic" HorizontalAlignment="Center">
+                    <Run Text="BELARUS "/><Run Text="RP" Foreground="{StaticResource Red}"/>
+                </TextBlock>
+                <ProgressBar IsIndeterminate="True" Width="220" Height="4" Margin="0,22,0,0"
+                             Foreground="#2B6CFF" Background="#22FFFFFF" BorderThickness="0"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

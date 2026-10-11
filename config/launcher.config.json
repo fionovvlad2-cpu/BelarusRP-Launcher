@@ -1,0 +1,26 @@
+﻿{
+    "githubOwner":  "fionovvlad2-cpu",
+    "githubRepo":  "BelarusRP-Launcher",
+    "apiBaseUrl":  "",
+    "requireLogin":  false,
+    "reportUrl":  "",
+    "feedbackUrl":  "",
+    "filesManifestUrl":  "",
+    "siteUrl":  "https://belarus-rp.ru",
+    "newsUrl":  "https://belarus-rp.ru/news",
+    "vkUrl":  "https://vk.com/your_group",
+    "discordUrl":  "https://discord.gg/your-invite",
+    "servers":  [
+                    {
+                        "name":  "Belarus RP #1",
+                        "host":  "play.belarus-rp.ru",
+                        "port":  22005,
+                        "statusPort":  0
+                    }
+                ],
+    "blockedProcesses":  [
+                             "cheatengine-x86_64",
+                             "cheatengine-i386",
+                             "cheatengine"
+                         ]
+}
